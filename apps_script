@@ -1,0 +1,35 @@
+function onOpen() {
+
+    SpreadsheetApp.getUi()
+      .createMenu('Google Maps')
+      .addItem('Create Link', 'createLink')
+      .addToUi()
+    
+    }
+    
+    
+    function createLink() {
+      var ss = SpreadsheetApp.getActiveSpreadsheet();
+      var sheet = ss.getActiveSheet();
+      var rangeData = ss.getActiveRange();
+      var firstColumn = rangeData.getColumn();
+      var firstRow = rangeData.getRow();
+      var lastColumn = rangeData.getLastColumn();
+      var lastRow = rangeData.getLastRow();
+      var searchRange = sheet.getRange(firstRow, firstColumn, lastRow - firstRow + 1, 1);
+    
+      if(firstColumn != lastColumn){
+        SpreadsheetApp.getUi().alert("Please only select 1 Column");
+        return;
+      }
+    
+      for (var i = 1; i <= lastRow - firstRow + 1 ; i++){
+        var currentCellValue = searchRange.getCell(i, 1).getValue();
+        if(currentCellValue != ""){
+          var newCellValue = '=HYPERLINK("https://www.google.com/maps/search/?api=1&query=' + currentCellValue + '", "' + currentCellValue + '")';
+          searchRange.getCell(i, 1).setValue(newCellValue);
+        }
+      }
+    }
+    
+  
